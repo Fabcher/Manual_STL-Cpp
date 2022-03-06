@@ -1,0 +1,974 @@
+Tutorial C++ STL 
+
+The C++ STL (Standard Template Library) is a powerful set of C++ template classes to provide general-purpose classes and functions with 
+templates that implement many popular and commonly used algorithms and data structures like vectors, lists, queues, and stacks.
+At the core of the C++ Standard Template Library are the following three well-structured components: 	
+
+1) Containers. Containers are used to manage collections of objects of a certain kind. There are several different types of containers 
+               like deque, list, vector, map etc. 
+2) Algorithms. Algorithms act on containers. They provide the means by which you will perform initialization, sorting, searching, and 
+               transforming of the contents of containers.
+3) Iterators. Iterators are used to step through the elements of collections of objects. These collections may be containers or subsets 
+              of containers.
+
+=======================================================================
+ 
+The C++ std::deque class  (<deque>)
+
+Deque (usually pronounced like "deck") is an irregular acronym of double-ended queue. Double-ended queues are sequence containers with 
+dynamic sizes that can be expanded or contracted on both ends (either its front or its back).
+Specific libraries may implement deques in different ways, generally as some form of dynamic array. But in any case, they allow for the 
+individual elements to be accessed directly through random access iterators, with storage handled automatically by expanding and 
+contracting the container as needed.
+Therefore, they provide a functionality similar to vectors, but with efficient insertion and deletion of elements also at the beginning 
+of the sequence, and not only at its end. But, unlike vectors, deques are not guaranteed to store all its elements in contiguous storage 
+locations: accessing elements in a deque by offsetting a pointer to another element causes undefined behavior.
+
+
+ 
+The C++ std::list class  (<list>)
+
+Lists are sequence containers that allow constant time insert and erase operations anywhere within the sequence, and iteration in 
+both directions.
+List containers are implemented as doubly-linked lists. Doubly linked lists can store each of the elements they contain in different 
+*and unrelated storage locations. The ordering is kept internally by the association to each element of a link to the element preceding 
+it and a link to the element following it.
+They are very similar to forward_list: The main difference being that forward_list objects are single-linked lists, and thus they can 
+only be iterated forwards, in exchange for being somewhat smaller and more efficient.
+Compared to other base standard sequence containers (array, vector and deque), lists perform generally better in inserting, extracting 
+and moving elements in any position within the container for which an iterator has already been obtained, and therefore also in algorithms 
+that make intensive use of these, like sorting algorithms.
+
+The main drawback of lists and forward_lists compared to these other sequence containers is that they lack direct access to the elements 
+by their position: for example, to access the sixth element in a list, one has to iterate from a known position (like the beginning or 
+the end) to that position, which takes linear time in the distance between these. They also consume some extra memory to keep the linking 
+information associated to each element (which may be an important factor for large lists of small-sized elements).
+
+// list::get_allocator
+#include <iostream>
+#include <list>
+
+int main ()
+{
+   std::list<int> mylist;
+   mylist.assign(7, 100);
+   for (auto it: mylist)
+      std::cout<< it << " ";
+
+   std::list<int>   mylist2;
+   int              * p;
+
+// allocate an array of 5 elements using mylist's allocator:
+   p = mylist2.get_allocator().allocate(5);
+
+// Assign some values to array via index. 
+   for (int i=0; i<5; ++i) 
+      p[i]=i;
+// Only this way you can have direct access to elements by index
+
+   std::cout << "The allocated array contains:";
+   for (int i=0; i<5; ++i) 
+      std::cout << ' ' << p[i];
+   std::cout << '\n';
+
+   mylist2.get_allocator().deallocate(p,5);
+
+   return 0;
+}
+
+Iterators:
+begin : Return iterator to beginning
+end : Return iterator to end
+rbegin : Return reverse iterator to reverse beginning
+rend : Return reverse iterator to reverse end
+cbegin : Return const_iterator to beginning
+cend : Return const_iterator to end
+crbegin : Return const_reverse_iterator to reverse beginning
+crend : Return const_reverse_iterator to reverse end
+
+Capacity:
+empty : Test whether container is empty
+size : Return size
+max_size : Return maximum size
+
+Element access:
+front : Access first element
+back : Access last element
+Modifiers:
+
+assign : Assign new content to container
+emplace_front : Construct and insert element at beginning
+push_front : Insert element at beginning
+pop_front : Delete first element
+emplace_back : Construct and insert element at the end
+push_back : Add element at the end
+pop_back : Delete last element
+emplace : Construct and insert element
+insert : Insert elements
+erase : Erase elements
+swap : Swap content
+resize : Change size
+clear : Clear content
+
+Operations:
+
+splice : Transfer elements from list to list
+remove : Remove elements with specific value
+remove_if : Remove elements fulfilling condition (public member function template )
+unique : Remove consecutive duplicate values
+merge : Merge sorted lists
+sort : Sort elements in container
+reverse : Reverse the order of elements
+
+Allocators:
+get_allocator : Get allocator
+
+ 
+The C++ std::map class  (<map>)
+
+Maps are associative containers that store elements formed by a combination of a key value and a mapped value, following a specific order.
+In a map, the key values are generally used to sort and uniquely identify the elements, while the mapped values store the content 
+associated to this key. The types of key and mapped value may differ, and are grouped together in member type value_type, which is a pair 
+type combining both
+Maps are typically implemented as binary search trees.
+
+#include <map>, <string>
+
+int main() {
+   std::map<int, float>   M1 ;
+   M1[1] = 111.111;
+   M1[3] = 333.333;
+   M1[9] = -999.999;
+
+   std::map<char, int>   M2 ;
+   std::string    S = "Hello World";
+   for (auto ch: M2)
+      M2 [ ch ] ++;  //  Count how many characters of each type there are
+  
+   std::map< string, std::map< string, int > >   M3;
+   M3["hello"]["world"] = 789;
+   M3["hello"]["kitty"] = 111;
+   std::cout<<M3["hello"]["world"]<<"\n";
+
+   return 0;
+}
+
+Iterators:
+
+begin : Return iterator to beginning
+end : Return iterator to end
+rbegin : Return reverse iterator to reverse beginning
+rend : Return reverse iterator to reverse end
+cbegin : Return const_iterator to beginning
+cend : Return const_iterator to end
+crbegin : Return const_reverse_iterator to reverse beginning
+crend : Return const_reverse_iterator to reverse end
+
+Capacity:
+empty : Test whether container is empty
+size : Return container size
+max_size : Return maximum size
+
+Element access:
+operator[] : Access element
+at : Access element
+
+Modifiers:
+insert : Insert elements
+erase : Erase elements
+swap : Swap content
+clear : Clear content
+emplace : Construct and insert element
+emplace_hint : and insert element with hint
+
+Observers:
+key_comp : Return key comparison object
+value_comp : Return value comparison object
+
+Operations:
+find : Get iterator to element
+count : Count elements with a specific key
+lower_bound : Return iterator to lower bound
+upper_bound : Return iterator to upper bound
+equal_range : Get range of equal elements
+
+Allocator:
+get_allocator : Get allocator
+
+
+
+ 
+The C++ std::set class  (<set>)
+
+Sets are containers that store unique elements following a specific order.
+In a set, the value of an element also identifies it (the value is itself the key, of type T), and each value must be unique. 
+The value of the elements in a set cannot be modified (they are unmutable) once in the container (the elements are always const), 
+but they can be inserted or removed from the container.
+The advantage over std::vector is that std::set is always automatically sorted, plus it has some builtin functions such as 
+set.find(val) and set.count(val) ( count always returns 0 or 1).
+The disadvantage is that std::set does not have the [] operator.
+
+#include <set>
+#include <iostream>
+
+std::set<int>   myset ;
+myset.insert(4);
+myset.insert(2);
+myset.insert(3);
+
+for (auto s: myset)
+   std::cout<< s <<"  ";  
+//  output:  2  3  4   ( automatically sorted ! )
+//  Warning: you cannot access values with myset[idx] ! 
+
+
+Iterators:
+
+begin : Return iterator to beginning
+end : Return iterator to end
+rbegin : Return reverse iterator to reverse beginning
+rend : Return reverse iterator to reverse end
+cbegin : Return const_iterator to beginning
+cend : Return const_iterator to end
+crbegin : Return const_reverse_iterator to reverse beginning
+crend : Return const_reverse_iterator to reverse end
+
+Capacity:
+empty : Test whether container is empty
+size() : Return container size
+max_size : Return maximum size
+
+Modifiers:
+clear : Clear content
+emplace : Construct and insert element
+emplace_hint: Construct and insert element with hint
+erase: Erase elements
+insert : Insert element
+swap : Swap content
+
+Observers:
+key_comp : Return comparison object
+value_comp : Return comparison object
+
+Operations:
+it = find(elem) : Get iterator to element
+count : Count elements with a specific value
+lower_bound : Return iterator to lower bound
+upper_bound : Return iterator to upper bound
+equal_range : Get range of equal elements
+
+Allocators:
+get_allocator : Get allocator
+
+=============================================================================
+
+ 
+The C++ std::string class
+
+C++ provides a much-improved implementation of the concept of string as part of the Standard Library. For example:
+
+#include <string>
+#include <iostream>
+
+string   a { "123" } ;
+string   b { "abc" } ;
+string   c = a + b ;   //  c = "123abc"
+
+auto   result = a.compare(b) ;
+if (result < 0 ) { cout<< " a < b " << endl; }
+if (result > 0 ) { cout<< " a > b " << endl; }
+if (result==0 ) { cout<< " a = b " << endl; }
+
+The string class supports quite a few additional operations. Here are a few :
+-   substr(pos,len): returns the subtring of a string that starts at pos and has length len.
+-   find(subs): return the position where a given substring subs is found in a string. 
+-   replace(pos,len,str)
+-   append(otherstr)
+-   starts_with(str) / ends_with(str): C++20
+-   to_string(number)
+-   stoi( string, *idx, base ) / stof( string ) / ... : returns an integer/float/etc and the index of the first                
+                                                                            non-numeric character
+-   c_str() and data(): return the C-style character array.
+
+
+
+Member functions
+(constructor) : string object
+(destructor) : destructor
+
+operator= : assignment
+
+
+Iterators:
+begin : Return iterator to beginning
+end : Return iterator to end
+
+rbegin : Return reverse iterator to reverse beginning
+rend : Return reverse iterator to reverse end
+cbegin : Return const_iterator to beginning
+cend : Return const_iterator to end
+crbegin : Return const_reverse_iterator to reverse beginning
+crend : Return const_reverse_iterator to reverse end
+
+
+Capacity:
+size : Return length of string
+length : Return length of string
+max_size : Return maximum size of string
+resize : Resize string
+capacity : Return size of allocated storage
+reserve : Request a change in capacity
+clear : Clear string
+empty : Test if string is empty
+shrink_to_fit : Shrink to fit
+
+Element access:
+operator[] : Get character of string
+at : Get character in string
+back : Access last character
+front : Access first character
+
+Modifiers:
+operator+= : Append to string
+append : Append to string
+push_back : Append character to string
+assign : Assign content to string
+insert : Insert into string
+erase : Erase characters from string
+replace : Replace portion of string
+swap : Swap string values
+pop_back : Delete last character
+
+String operations:
+c_str : Get C string equivalent
+
+data
+    Get string data
+
+get_allocator
+    Get allocator
+
+copy
+    Copy sequence of characters from string
+
+find
+    Find content in string
+
+rfind
+    Find last occurrence of content in string
+
+find_first_of
+    Find character in string
+
+find_last_of
+    Find character in string from the end
+
+find_first_not_of
+    Find absence of character in string
+
+find_last_not_of
+    Find non-matching character in string from the end
+
+substr
+    Generate substring
+
+compare
+    Compare strings
+
+
+Member constants
+
+npos
+    Maximum value for size_t (public static member constant )
+
+
+Non-member function overloads
+
+operator+
+    Concatenate strings (function )
+
+relational operators
+    Relational operators for string (function )
+
+swap
+    Exchanges the values of two strings (function )
+
+operator>>
+    Extract string from stream (function )
+
+operator<<
+    Insert string into stream (function )
+
+getline
+    Get line from stream into string (function )
+
+
+ 
+The C++ std::tuple class  (<tuple>)
+
+A tuple is an object capable to hold a collection of elements. Each element can be of a different type.
+Conceptually, they are similar to plain old data structures (C-like structs) but instead of having named data members, its 
+elements are accessed by their order in the tuple.
+The selection of particular elements within a tuple is done at the template-instantiation level, and thus, it must be specified 
+at compile-time, with helper functions such as get and tie.
+
+//-------------------------------------------------------
+// tuple example
+#include <iostream>   // std::cout
+#include <tuple>      // std::tuple, std::get, std::tie, std::ignore
+
+int main ()
+{
+  std::tuple<int,char> foo (10,'x');
+  auto bar = std::make_tuple ("test", 3.1, 14, 'y');
+
+  std::get<2>(bar) = 100;             // access element
+
+  int myint; char mychar;
+  std::tie (myint, mychar) = foo;     // unpack elements
+  std::tie (std::ignore, std::ignore, myint, mychar) = bar;  // unpack (with ignore)
+
+  mychar = std::get<3>(bar);
+
+  std::get<0>(foo) = std::get<2>(bar);
+  std::get<1>(foo) = mychar;
+
+  std::cout << "foo contains: ";
+  std::cout << std::get<0>(foo) << ' ';
+  std::cout << std::get<1>(foo) << '\n';
+
+  return 0;
+}
+//----------------------------------
+
+Helper classes
+tuple_size : Tuple size traits (class template )
+tuple_element : Tuple element type (class template )
+
+Functions
+Object creation
+make_tuple : Construct tuple (function template )
+forward_as_tuple : Forward as tuple (function template )
+tie : Tie arguments to tuple elements (function template )
+tuple_cat : Concatenate tuples (function template )
+
+Element access
+Get : Get element (function template )
+
+Objects
+Ignore : Ignore assignment (object )
+ 
+The C++ std::vector class  (<vector>)
+
+Vectors are sequence containers representing arrays that can change in size.
+Just like arrays, vectors use contiguous storage locations for their elements, which means that their elements can also be 
+accessed using offsets on regular pointers to its elements, and just as efficiently as in arrays. But unlike arrays, their 
+size can change dynamically, with their storage being handled automatically by the container.
+
+//------------------------------------------------------------------
+//  Example for vector<>, vector<>::iterator
+#include <iostream>  //  for cout
+#include <vector>  //  for vector and iterator
+using namespace std;
+ 
+int main() {
+
+// create a vector to store int
+   vector<int>    vec; 
+   vector<int>    v2 = { 1, 2, 3, 4 };  //  Direct initialization 
+   vector<int>    v3 { 1, 2, 3, 4 };  //  Direct initialization 
+   int            i;
+
+// display the original size of vec
+   cout << "vector size = " << vec.size() << endl;
+
+//  Warning: never assign a value to vector element beyond its size
+//  (e.g. vec[10] = 1) because you are going to write into unknown memory
+
+// Add elements using push_back
+   for(i = 0; i < 5; i++) {
+      vec.push_back(i);
+   }
+
+// display new size of vec
+   cout << "new vector size = " << vec.size() << endl;
+
+// access 5 values from the vector
+   for(i = 0; i < 5; i++) {
+      cout << "value of vec [" << i << "] = " << vec[i] << endl;
+   }
+
+   // use iterator to access the values
+   vector<int>::iterator   it = vec.begin();  //  it is actually a pointer
+   while( it != vec.end()) {
+      cout << "value of iterator = " << *it << endl;
+      it++;  //  Iterators can be simply incremented like an index
+   }
+   for (auto el: vec)  //  el is an int
+      cout << "value of element = " << el << endl;
+
+   return 0;
+}
+//-----------------------------------------------------------------
+
+Functions of <vector>
+Iterators:
+
+begin() : Return iterator to beginning
+end() : Return iterator to end
+rbegin() : Return reverse iterator to reverse beginning
+rend() : Return reverse iterator to reverse end
+cbegin() : Return const_iterator to beginning
+cend() : Return const_iterator to end
+crbegin() : Return const_reverse_iterator to reverse beginning
+crend() : Return const_reverse_iterator to reverse end
+
+Capacity:
+size() : Return size
+max_size() : Return maximum size
+resize() : Change size
+capacity() : Return size of allocated storage capacity
+empty() : Test whether vector is empty
+reserve() : Request a change in capacity
+shrink_to_fit() : Shrink to fit
+
+Element access:
+operator[] : Access element
+at(n) : Access element
+front() : Access first element
+back() : Access last element
+data() : A pointer to the first element in the data array used internally by the vector.
+
+Modifiers:
+assign(n, val) : Assign val n times to vector.
+clear : Clear content
+erase : Erase elements
+emplace : Construct and insert element
+emplace_back : Construct and insert element at the end
+insert(it, val) : Insert val in position it
+insert(it, n, val) : Insert val n times in position it
+insert(it, *arr, *arr+n) : Insert values from *arr[0] to *arr[n-1] in position it
+push_back : Add element at the end
+pop_back : Delete last element
+swap : Swap content
+
+Allocator:
+get_allocator : Get allocator
+==========================================================================
+
+
+ 
+Structured bindings
+
+Structured bindings allow you to declare multiple variables at once that are initialized with elements from an array, 
+struct or pair. For example:
+
+   array<int>   values { 11, 22, 33 } ;  //  int is optional
+   auto         [x, y, z]  { values }; 
+
+Note that you must use the keyword auto for structured bindings. You cannot use int, etc.
+Note also that the number of variables declared must match the number of values in the expression on the right.
+
+ 
+Uniform Initialization
+
+Since C++11 you can initialize a class or a stucture also curly brackets:
+
+   circleStruct   myCircle1 = { 10, 20, 2 };  //  The equal is optional
+   circleClass    myCircle2 = { 10, 20, 2 };  //  The equal is optional
+
+If ExampleClass has a, b, x, s as members, the class can now be initialized in the following way:
+
+   ExampleClass   myClass { 1, 2, 5.5, "Hello" };
+
+Also arrays can be initialized with curly brackets:
+
+   int   *myArray = new int[4] { 11, 22, 33, 44 } ;
+
+For strings ( arrays of chars ) the situation is a bit more complicated. For example:
+
+   char   *ptr { "Hello" } ;  //  Assigns the string literal to a variable
+   ptr[1] = 'a';   //  Undefined behavior ! Because the literal could be
+                   //  in read-only memory
+   char   arr[] { "Hello" } ;  //  The compiler takes care of creating the
+                               //  appropriate sized char array
+   arr[1] = 'a';  //  Works. The contents can be modified.
+
+
+=====================================================================
+
+ 
+Designated Initializers
+
+Since C++20 you can specify the members of a class to initialize using their names. More precisely, if ExampleClass has 
+a, b, x, s as members, it can be initialized in the following way:
+
+   ExampleClass   myClass { .a = 1, .b = 2, .x = 5.5, .s = "Hello" } ;
+
+Note that you can skip a member and it will get its in-class value or alternatively 0.
+
+=========================================================================
+
+ 
+Reference Variables
+
+Refernce variables are aliases for other variables. All modifications to the reference change the value of the variable 
+to which it refers.
+Reference variables must be initialiwed as soon as they are created, like this:
+
+   int   x { 3 } ;
+   int   &xRef { x } ;
+   xRef = 4 ;  //  now  x = 4  and cannot be changed once they are created.
+
+===========================================================================
+
+ 
+Exceptions
+
+When a piece of code detects an exceptional situation, it throws an exception. At that point another piece of code catches 
+the excpetion and takes an appropriate action.
+For example:
+
+   #include <stdexcept>
+
+   double divideNumbers( double numerator, double denominator) {
+      if (denominator == 0 ) {
+         throw invalid_argument { "Denominator cannot be 0 !" }
+      }
+      return numeraot / denominator;
+   }
+
+When the throw statement is executed, the function immediately ends without returning a value.
+If the calling instruction is sorrounded with a try/catch block, it receives an exception and is ablt to handle it. 
+For example:
+
+   try {
+      std::cout << divideNumbers( 3, 0 ) << std::endl ;
+   } catch ( const invalid_argument & eexcption )  {
+      std::cout << "Exception caught: " << exception.what() <<  std:endl ;
+   }
+
+
+
+==============================================================================
+
+ 
+ 
+========================================================================
+ 
+ 
+ 
+
+====================================================================
+
+ 
+
+======================================================================
+
+The C++ Standard Library can be categorized into two parts −
+
+The Standard Function Library − This library consists of general-purpose,stand-alone functions that are not part of any 
+class. The function library is inherited from C.
+
+The Object Oriented Class Library − This is a collection of classes and associated functions.
+
+Standard C++ Library incorporates all the Standard C libraries also, with small additions and changes to support type safety.
+
+The Standard Function Library is divided into the following categories :
+
+    I/O,
+    String and character handling,
+    Mathematical,
+    Time, date, and localization,
+    Dynamic allocation,
+    Miscellaneous,
+    Wide-character functions,
+
+The Object Oriented Class Library defines an extensive set of classes that provide support for a number of common activities, 
+including I/O, strings, and numeric processing. This library includes the following :
+
+    The Standard C++ I/O Classes
+    The String Class
+    The Numeric Classes
+    The STL Container Classes
+    The STL Algorithms
+    The STL Function Objects
+    The STL Iterators
+    The STL Allocators
+    The Localization library
+    Exception Handling Classes
+    Miscellaneous Support Library
+
+=============================================================================
+
+Algorithms
+The <algorithm> library contains a very large number of algorithm that are highly optimized.
+
+sort(vec.begin(), vec.end() );  //  In-place sorting
+
+bool  res = binary_search(vec.begin(), vec.end(), el);  
+  // Checks if el is present in a sorted vec
+
+
+
+Functions in <algorithm>  ( https://www.cplusplus.com/reference/algorithm/ )
+Non-modifying sequence operations:
+
+adjacent_find : Find equal adjacent elements in range (function template )
+
+all_of ( it.begin(), it.end(), bool cond_func) / any_of / none_of : Test if all / any / none elements  in range meet 
+   condition (note: cond_func without parenteses!)
+
+count : Count appearances of value in range (function template )
+
+count_if : Return number of elements in range satisfying condition (function template )
+
+find : Find value in range (function template )
+
+find_if : Find element in range (function template )
+
+find_if_not : Find element in range (negative condition) (function template )
+
+find_end : Find last subsequence in range (function template )
+
+find_first_of : Find element from set in range (function template )
+
+for_each : Apply function to range (function template )
+
+mismatch : Return first position where two ranges differ (function template )
+
+equal : Test whether the elements in two ranges are equal (function template )
+
+is_permutation : Test whether range is permutation of another (function template )
+
+search : Search range for subsequence (function template )
+
+search_n : Search range for elements (function template )
+
+
+Modifying sequence operations:
+
+copy : Copy range of elements (function template )
+
+copy_n
+    Copy n elements (function template )
+
+copy_if
+    Copy certain elements of range (function template )
+
+copy_backward
+    Copy range of elements backward (function template )
+
+move
+    Move range of elements (function template )
+
+move_backward
+    Move range of elements backward (function template )
+
+swap
+    Exchange values of two objects (function template )
+
+swap_ranges
+    Exchange values of two ranges (function template )
+
+iter_swap
+    Exchange values of objects pointed to by two iterators (function template )
+
+transform
+    Transform range (function template )
+
+replace
+    Replace value in range (function template )
+
+replace_if
+    Replace values in range (function template )
+
+replace_copy
+    Copy range replacing value (function template )
+
+replace_copy_if
+    Copy range replacing value (function template )
+
+fill
+    Fill range with value (function template )
+
+fill_n
+    Fill sequence with value (function template )
+
+generate
+    Generate values for range with function (function template )
+
+generate_n
+    Generate values for sequence with function (function template )
+
+remove
+    Remove value from range (function template )
+
+remove_if
+    Remove elements from range (function template )
+
+remove_copy
+    Copy range removing value (function template )
+
+remove_copy_if
+    Copy range removing values (function template )
+
+unique
+    Remove consecutive duplicates in range (function template )
+
+unique_copy
+    Copy range removing duplicates (function template )
+
+reverse
+    Reverse range (function template )
+
+reverse_copy
+    Copy range reversed (function template )
+
+rotate
+    Rotate left the elements in range (function template )
+
+rotate_copy
+    Copy range rotated left (function template )
+
+random_shuffle
+    Randomly rearrange elements in range (function template )
+
+shuffle
+    Randomly rearrange elements in range using generator (function template )
+
+
+Partitions:
+
+is_partitioned
+    Test whether range is partitioned (function template )
+
+partition
+    Partition range in two (function template )
+
+stable_partition
+    Partition range in two - stable ordering (function template )
+
+partition_copy
+    Partition range into two (function template )
+
+partition_point
+    Get partition point (function template )
+
+
+Sorting:
+
+sort
+    Sort elements in range (function template )
+
+stable_sort
+    Sort elements preserving order of equivalents (function template )
+
+partial_sort
+    Partially sort elements in range (function template )
+
+partial_sort_copy
+    Copy and partially sort range (function template )
+
+is_sorted
+    Check whether range is sorted (function template )
+
+is_sorted_until : Find first unsorted element in range (function template )
+
+nth_element : Sort element in range (function template )
+
+
+Binary search (operating on partitioned/sorted ranges):
+
+lower_bound : Return iterator to lower bound (function template )
+
+upper_bound: Return iterator to upper bound (function template )
+
+equal_range : Get subrange of equal elements (function template )
+
+binary_search : Test if value exists in sorted sequence (function template )
+
+
+Merge (operating on sorted ranges):
+
+merge
+    Merge sorted ranges (function template )
+
+inplace_merge
+    Merge consecutive sorted ranges (function template )
+
+includes
+    Test whether sorted range includes another sorted range (function template )
+
+set_union
+    Union of two sorted ranges (function template )
+
+set_intersection
+    Intersection of two sorted ranges (function template )
+
+set_difference
+    Difference of two sorted ranges (function template )
+
+set_symmetric_difference
+    Symmetric difference of two sorted ranges (function template )
+
+
+Heap:
+
+push_heap
+    Push element into heap range (function template )
+
+pop_heap
+    Pop element from heap range (function template )
+
+make_heap
+    Make heap from range (function template )
+
+sort_heap
+    Sort elements of heap (function template )
+
+is_heap
+    Test if range is heap (function template )
+
+is_heap_until
+    Find first element not in heap order (function template )
+
+
+Min/max:
+
+min
+    Return the smallest (function template )
+
+max
+    Return the largest (function template )
+
+minmax
+    Return smallest and largest elements (function template )
+
+min_element
+    Return smallest element in range (function template )
+
+max_element
+    Return largest element in range (function template )
+
+minmax_element
+    Return smallest and largest elements in range (function template )
+
+
+Other:
+
+lexicographical_compare
+    Lexicographical less-than comparison (function template )
+
+next_permutation
+    Transform range to next permutation (function template )
+
+prev_permutation
+    Transform range to previous permutation (function template )
+
+=========================================================================
+
+Smart Pointers
+
+Memory management in C++ is a perennial source of errors and bugs. Many of these bugs arise from the use 
+
